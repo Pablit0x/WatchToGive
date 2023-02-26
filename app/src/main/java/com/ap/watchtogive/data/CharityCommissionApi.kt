@@ -14,7 +14,7 @@ interface CharityCommissionApi {
         @Path("charityName") charityName : String
     ): List<CharityDto>
 
-    @GET("api/allcharitydetails/{RegisteredNumber}/{suffix}")
+    @GET("api/allcharitydetails/{registeredNumber}/{suffix}")
     suspend fun getCharityByRegisteredNumber(
         @Header("Ocp-Apim-Subscription-Key") apiKey: String,
         @Path("registeredNumber") registeredNumber: Int,
