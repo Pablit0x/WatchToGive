@@ -17,8 +17,8 @@ class CharityRepositoryImpl @Inject constructor(
         return charityApi.getCharitiesByName(apiKey = Constants.API_KEY, charityName = charityName)
     }
 
-    override suspend fun getCharityByRegisteredNumber(regNumber: Int): CharityDetailDto {
-        return charityApi.getCharityByRegisteredNumber(apiKey = Constants.API_KEY, registeredNumber = regNumber)
+    override suspend fun getCharityOverviewByRegisteredNumber(regNumber: Int): CharityDetailDto {
+        return charityApi.getCharityOverviewByRegisteredNumber(apiKey = Constants.API_KEY, registeredNumber = regNumber)
     }
 
 }
