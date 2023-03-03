@@ -3,14 +3,7 @@ package com.ap.watchtogive
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.ap.watchtogive.presentation.charity_search.CharitySearchScreen
+import com.ap.watchtogive.presentation.Navigation
 import com.ap.watchtogive.presentation.theme.WatchToGiveTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,13 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WatchToGiveTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    CharitySearchScreen()
-                }
+                Navigation()
             }
         }
     }
