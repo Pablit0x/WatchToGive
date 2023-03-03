@@ -13,16 +13,17 @@ import com.ap.watchtogive.presentation.home.HomeScreen
 fun Navigation(){
     var navController = rememberNavController()
 
-        NavHost(
-            navController,
-            startDestination = "homepage",
-        ) {
-            composable(route = "homepage") {
-                HomeScreen()
-            }
+    NavHost(
+        navController,
+        startDestination = "homepage",
+    ) {
+        composable(route = "homepage") {
+            HomeScreen()
+        }
 
-//            composable(route = "vote") {
-//                CharitySearchScreen()
-//            }
+//        composable(route = "vote") {
+//            CharitySearchScreen()
+//        }
+
     }
 }
