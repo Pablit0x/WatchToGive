@@ -9,17 +9,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
 import com.ap.watchtogive.presentation.theme.DarkTextColour
 import com.ap.watchtogive.presentation.theme.TextColour
 
 @Composable
 fun CurrentlyVotedForCard(
+    navigate: () -> Unit
 ) {
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.2f)
         .clickable {
                    //todo Navigate to vote
+                   navigate()
         },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
