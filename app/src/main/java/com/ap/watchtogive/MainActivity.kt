@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
                 .update("watched", FieldValue.increment(1))
 
             loadAd()
+            Toast.makeText(this@MainActivity,"Thank You!", Toast.LENGTH_LONG).show()
         })
     }
 }
