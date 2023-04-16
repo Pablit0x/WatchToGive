@@ -1,5 +1,6 @@
 package com.ap.watchtogive.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
@@ -7,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ap.watchtogive.presentation.home.componants.CurrentlyVotedForCard
 import com.ap.watchtogive.presentation.home.componants.DisplayCurrentCount
 import com.ap.watchtogive.presentation.home.componants.VoteWinnerCard
@@ -22,6 +24,8 @@ fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
+    homeScreenViewModel.setupListener()
+    Log.d("lolipop","view.int: "+homeScreenViewModel.totalAdsWatched);
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),

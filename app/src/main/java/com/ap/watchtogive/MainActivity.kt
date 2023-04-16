@@ -32,8 +32,6 @@ class MainActivity : ComponentActivity() {
 
         loadAd()
 
-
-
         setContent {
             WatchToGiveTheme {
                Navigation(

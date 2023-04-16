@@ -7,6 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 
+/**
+ * Interface to define HTTP operations that will need to be
+ * performed. [GET,PUT,POST,DELETE]
+ */
 interface CharityCommissionApi {
     @GET("api/searchCharityName/{charityName}")
     suspend fun getCharitiesByName(
