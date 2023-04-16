@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ap.watchtogive.presentation.charity_search.CharitySearchScreen
 import com.ap.watchtogive.presentation.theme.WatchToGiveTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,21 +25,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    CharitySearchScreen()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    WatchToGiveTheme {
-        Greeting("Android")
     }
 }
