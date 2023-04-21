@@ -36,6 +36,9 @@ fun CharitySearchScreen(charitySearchViewModel: CharitySearchViewModel = hiltVie
                 searchTextState = searchTextState,
                 onTextChange = {
                     charitySearchViewModel.updateSearchTextState(newValue = it)
+                    if(it.isEmpty()){
+                        charitySearchViewModel.getTop10Charities()
+                    }
                 },
                 onCloseClicked = {
                     charitySearchViewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)

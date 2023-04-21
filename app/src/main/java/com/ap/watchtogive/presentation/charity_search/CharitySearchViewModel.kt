@@ -6,13 +6,12 @@ import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ap.watchtogive.common.Resource
-import com.ap.watchtogive.domain.model.CharityDetail
 import com.ap.watchtogive.domain.use_case.GetCharitiesByNameUseCase
 import com.ap.watchtogive.domain.use_case.GetCharityOverviewByRegistrationNumberUseCase
+import com.ap.watchtogive.domain.use_case.GetTop10CharitiesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CharitySearchViewModel @Inject constructor(
     private val getCharitiesByNameUseCase: GetCharitiesByNameUseCase,
-    private val getCharityOverviewByRegistrationNumberUseCase: GetCharityOverviewByRegistrationNumberUseCase
+    private val getCharityOverviewByRegistrationNumberUseCase: GetCharityOverviewByRegistrationNumberUseCase,
+    private val getTop10CharitiesUseCase: GetTop10CharitiesUseCase
 ) : ViewModel() {
 
     private val _listState = mutableStateOf(CharitiesListState())
@@ -46,6 +46,9 @@ class CharitySearchViewModel @Inject constructor(
         _searchTextState.value = newValue
     }
 
+    init {
+        getTop10Charities()
+    }
     fun getCharityDetails(context: Context, charityRegNumber: Int ){
         getCharityOverviewByRegistrationNumberUseCase(regNumber = charityRegNumber).onEach { result ->
             when(result) {
@@ -82,7 +85,25 @@ class CharitySearchViewModel @Inject constructor(
                     )
                 }
                 is Resource.Loading -> {
-                    Log.d("different", "NO LADUJE SIE CZEKAJ!")
+                    _listState.value = CharitiesListState(isLoading = true)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    // TODO: Cache those
+    fun getTop10Charities(){
+        getTop10CharitiesUseCase().onEach { result ->
+            when(result) {
+                is Resource.Success ->{
+                    _listState.value = CharitiesListState(charities = result.data ?: emptyList())
+                }
+                is Resource.Error -> {
+                    _listState.value = CharitiesListState(
+                        error = result.message ?: "An unexpected error occurred"
+                    )
+                }
+                is Resource.Loading -> {
                     _listState.value = CharitiesListState(isLoading = true)
                 }
             }
