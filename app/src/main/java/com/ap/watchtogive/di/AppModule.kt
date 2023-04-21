@@ -3,7 +3,11 @@ package com.ap.watchtogive.di
 import com.ap.watchtogive.common.Constants
 import com.ap.watchtogive.data.CharityCommissionApi
 import com.ap.watchtogive.data.repository.CharityRepositoryImpl
+import com.ap.watchtogive.data.repository.FirebaseRepositoryImpl
 import com.ap.watchtogive.domain.repository.CharityRepository
+import com.ap.watchtogive.domain.repository.FirebaseRepository
+import com.ap.watchtogive.domain.use_case.SetupFirebaseListener
+import com.ap.watchtogive.domain.use_case.UseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,11 +30,25 @@ object AppModule {
             .create(CharityCommissionApi::class.java)
     }
 
-
     @Provides
     @Singleton
     fun provideCharityRepository(charityApi: CharityCommissionApi) : CharityRepository{
         return CharityRepositoryImpl(charityApi)
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseRepository() : FirebaseRepository{
+        return FirebaseRepositoryImpl()
+    }
+
+    @Provides
+    fun provideUseCases(
+        firebaseRepository: FirebaseRepository,
+        charityRepository: CharityRepository
+    ) =
+        UseCases(
+            setupFirebaseListener = SetupFirebaseListener(firebaseRepository)
+        )
 
 }

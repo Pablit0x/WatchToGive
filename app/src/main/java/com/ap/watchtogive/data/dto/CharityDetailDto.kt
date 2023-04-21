@@ -3,6 +3,7 @@ package com.ap.watchtogive.data.dto
 import com.ap.watchtogive.domain.model.CharityDetail
 
 data class CharityDetailDto(
+    //todo: Use @SerializedNames()?
     val activities: String,
     val agreement_commercial_participator: Boolean,
     val agreement_professional_fundraiser: Boolean,
