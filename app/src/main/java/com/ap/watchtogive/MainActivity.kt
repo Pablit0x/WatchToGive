@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WatchToGiveTheme {
                Navigation(
-                   runAd = { showAd() }
+                   onNavigationAction = { showAd() }
                )
             }
         }

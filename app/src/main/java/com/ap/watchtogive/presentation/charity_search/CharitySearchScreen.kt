@@ -22,9 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun CharitySearchScreen(charitySearchViewModel: CharitySearchViewModel = hiltViewModel()) {
+fun CharitySearchScreen(
+    navController: NavController,
+    charitySearchViewModel: CharitySearchViewModel = hiltViewModel()) {
 
     val searchWidgetState by charitySearchViewModel.searchWidgetState
     val searchTextState by charitySearchViewModel.searchTextState
