@@ -2,7 +2,7 @@ package com.ap.watchtogive.data.dto
 
 import com.ap.watchtogive.domain.model.Charity
 
-data class CharityDetailFromRanking(
+data class TopCharityDto(
     val assets_long_term_investment: Double,
     val assets_other_assets: Double,
     val assets_own_use: Double,
@@ -32,7 +32,7 @@ data class CharityDetailFromRanking(
     val volunteers: Double
 )
 
-fun CharityDetailFromRanking.toCharity () : Charity {
+fun TopCharityDto.toCharity () : Charity {
     return Charity(
         name = charity_name,
         registrationNumber = reg_charity_number,

@@ -3,8 +3,8 @@ package com.ap.watchtogive.data.repository
 import com.ap.watchtogive.common.Constants
 import com.ap.watchtogive.data.CharityCommissionApi
 import com.ap.watchtogive.data.dto.CharityDetailDto
-import com.ap.watchtogive.data.dto.CharityDetailFromRanking
 import com.ap.watchtogive.data.dto.CharityDto
+import com.ap.watchtogive.data.dto.TopCharityDto
 import com.ap.watchtogive.domain.model.Charity
 import com.ap.watchtogive.domain.model.CharityDetail
 import com.ap.watchtogive.domain.repository.CharityRepository
@@ -22,7 +22,7 @@ class CharityRepositoryImpl @Inject constructor(
         return charityApi.getCharityOverviewByRegisteredNumber(registeredNumber = regNumber)
     }
 
-    override suspend fun getTop10Charities(listType: String): List<CharityDetailFromRanking> {
+    override suspend fun getTop10Charities(listType: String): List<TopCharityDto> {
         return charityApi.getTop10Charities()
     }
 

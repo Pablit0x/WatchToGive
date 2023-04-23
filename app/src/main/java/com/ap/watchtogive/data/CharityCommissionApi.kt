@@ -2,8 +2,8 @@ package com.ap.watchtogive.data
 
 import com.ap.watchtogive.common.Constants
 import com.ap.watchtogive.data.dto.CharityDetailDto
-import com.ap.watchtogive.data.dto.CharityDetailFromRanking
 import com.ap.watchtogive.data.dto.CharityDto
+import com.ap.watchtogive.data.dto.TopCharityDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -30,6 +30,6 @@ interface CharityCommissionApi {
     suspend fun getTop10Charities(
         @Header(Constants.API_HEADER) apiKey: String = Constants.API_KEY,
         @Path("listType") listType: String = "Income"
-    ) : List<CharityDetailFromRanking>
+    ) : List<TopCharityDto>
 
 }
