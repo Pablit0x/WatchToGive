@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
@@ -23,6 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.ap.watchtogive.presentation.charity_detail.ShowLoadingIndicator
 
 @Composable
 fun CharitySearchScreen(
@@ -32,7 +32,7 @@ fun CharitySearchScreen(
     val searchWidgetState by charitySearchViewModel.searchWidgetState
     val searchTextState by charitySearchViewModel.searchTextState
 
-    val charityList = charitySearchViewModel.listState.value.charities
+    val charityList = charitySearchViewModel.listState.value.charities.filter { it.isActive }
 
     Scaffold(topBar = {
         MainAppBar(searchWidgetState = searchWidgetState,
@@ -54,7 +54,7 @@ fun CharitySearchScreen(
             })
     }, content = { padding ->
         Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize()
         ) {
             if(charityList.isEmpty() && !charitySearchViewModel.listState.value.isLoading){
                 EmptyListIndicator()
@@ -74,7 +74,7 @@ fun CharitySearchScreen(
                 }
             }
             if (charitySearchViewModel.listState.value.isLoading) {
-                CircularProgressIndicator(color = Color.White)
+                ShowLoadingIndicator()
             }
         }
     })

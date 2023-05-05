@@ -39,7 +39,7 @@ fun CharityDetailScreen(charity: Charity, charityDetailViewModel: CharityDetailV
 @Composable
 fun ShowLoadingIndicator(){
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-        CircularProgressIndicator(color = Color.Black)
+        CircularProgressIndicator(color = Color.Gray)
     }
 }
 
@@ -52,7 +52,8 @@ fun ShowCharityDetail(charity: Charity, charityDetail: CharityDetail){
             .padding(24.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
         Text(text = "Registration number : ${charity.registrationNumber}", fontWeight = FontWeight.Light, fontStyle = FontStyle.Italic, modifier = Modifier.padding(16.dp))
 
-        Text(text = "${charityDetail.description}",  modifier = Modifier
+        Text(text = charityDetail.description ?: "Sorry, there's no information on this charity's description",  modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
             .border(BorderStroke(1.dp, Color.LightGray))
             .padding(16.dp)
