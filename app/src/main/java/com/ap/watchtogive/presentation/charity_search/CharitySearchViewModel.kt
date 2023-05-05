@@ -1,8 +1,5 @@
 package com.ap.watchtogive.presentation.charity_search
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ap.watchtogive.common.Resource
 import com.ap.watchtogive.domain.use_case.GetCharitiesByNameUseCase
-import com.ap.watchtogive.domain.use_case.GetCharityOverviewByRegistrationNumberUseCase
 import com.ap.watchtogive.domain.use_case.GetTop10CharitiesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -20,15 +16,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CharitySearchViewModel @Inject constructor(
     private val getCharitiesByNameUseCase: GetCharitiesByNameUseCase,
-    private val getCharityOverviewByRegistrationNumberUseCase: GetCharityOverviewByRegistrationNumberUseCase,
     private val getTop10CharitiesUseCase: GetTop10CharitiesUseCase
 ) : ViewModel() {
 
     private val _listState = mutableStateOf(CharitiesListState())
     val listState : State<CharitiesListState> = _listState
-
-    private val _detailState = mutableStateOf(CharityDetailState())
-    val detailState : State<CharityDetailState> = _detailState
 
     private val _searchWidgetState: MutableState<SearchWidgetState> =
         mutableStateOf(value = SearchWidgetState.CLOSED)
@@ -49,28 +41,6 @@ class CharitySearchViewModel @Inject constructor(
     init {
         getTop10Charities()
     }
-    fun getCharityDetails(context: Context, charityRegNumber: Int ){
-        getCharityOverviewByRegistrationNumberUseCase(regNumber = charityRegNumber).onEach { result ->
-            when(result) {
-                is Resource.Success ->{
-                    if (result.data?.description != null) {
-                        Toast.makeText(context, result.data.description, Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(context, "Description is null", Toast.LENGTH_LONG).show()
-                    }
-
-                }
-                is Resource.Error -> {
-                    _detailState.value = CharityDetailState(
-                        error = result.message ?: "An unexpected error occurred"
-                    )
-                }
-                is Resource.Loading -> {
-                    _detailState.value = CharityDetailState(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
 
 
     fun getCharities(charityName : String){
@@ -90,8 +60,6 @@ class CharitySearchViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
-
-    // TODO: Cache those
     fun getTop10Charities(){
         getTop10CharitiesUseCase().onEach { result ->
             when(result) {

@@ -6,8 +6,9 @@ import com.ap.watchtogive.data.repository.CharityRepositoryImpl
 import com.ap.watchtogive.data.repository.FirebaseRepositoryImpl
 import com.ap.watchtogive.domain.repository.CharityRepository
 import com.ap.watchtogive.domain.repository.FirebaseRepository
-import com.ap.watchtogive.domain.use_case.SetupFirebaseListener
-import com.ap.watchtogive.domain.use_case.UseCases
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,22 +34,18 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCharityRepository(charityApi: CharityCommissionApi) : CharityRepository{
-        return CharityRepositoryImpl(charityApi)
+        return CharityRepositoryImpl(charityApi = charityApi)
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseRepository() : FirebaseRepository{
-        return FirebaseRepositoryImpl()
+    fun provideFirebaseRepository(firestore: FirebaseFirestore) : FirebaseRepository{
+        return FirebaseRepositoryImpl(firestore = firestore)
     }
 
     @Provides
-    fun provideUseCases(
-        firebaseRepository: FirebaseRepository,
-        charityRepository: CharityRepository
-    ) =
-        UseCases(
-            setupFirebaseListener = SetupFirebaseListener(firebaseRepository)
-        )
-
+    @Singleton
+    fun getFirestore() : FirebaseFirestore {
+        return Firebase.firestore
+    }
 }

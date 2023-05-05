@@ -1,30 +1,27 @@
 package com.ap.watchtogive.data.repository
 
 import com.ap.watchtogive.domain.repository.FirebaseRepository
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import javax.inject.Inject
 
 
-class FirebaseRepositoryImpl () : FirebaseRepository{
+class FirebaseRepositoryImpl @Inject constructor(
+    private val firestore: FirebaseFirestore
+) : FirebaseRepository {
 
-    override suspend fun setListener1(): Flow<Int> =
-        callbackFlow{
-            val fireStore = Firebase.firestore
-            val fireStoreCallback = fireStore
-                .collection("total")
-                .document("ads")
-                .addSnapshotListener { documentSnapshot, _ ->
-                    if(documentSnapshot != null && documentSnapshot.exists()){
-                        var number = documentSnapshot.getLong("watched")!!.toInt()
-                        trySend(number)
-                    }
+    override suspend fun getTotalAdsWatched(): Flow<Long> = callbackFlow {
+        val listenerRegistration = firestore.collection("total").document("ads")
+            .addSnapshotListener { documentSnapshot, _ ->
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    val number = documentSnapshot.getLong("watched")
+                    trySend(number ?: 0)
                 }
-
-            awaitClose {
-
             }
+        awaitClose {
+            listenerRegistration.remove()
+        }
     }
 }

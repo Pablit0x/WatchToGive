@@ -1,6 +1,5 @@
-package com.ap.watchtogive.presentation.charity_search
+package com.ap.watchtogive.presentation.charity_detail
 
-import com.ap.watchtogive.domain.model.Charity
 import com.ap.watchtogive.domain.model.CharityDetail
 
 data class CharityDetailState(

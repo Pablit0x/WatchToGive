@@ -1,15 +1,29 @@
 package com.ap.watchtogive
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ap.watchtogive.common.Constants
-import com.ap.watchtogive.presentation.Navigation
-import com.ap.watchtogive.presentation.home.HomeScreenViewModel
+import com.ap.watchtogive.common.utils.ConnectivityObserver
+import com.ap.watchtogive.common.utils.ConnectivityObserverImpl
+import com.ap.watchtogive.presentation.navigation.Navigation
 import com.ap.watchtogive.presentation.theme.WatchToGiveTheme
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -24,19 +38,50 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var connectivityObserver: ConnectivityObserver
     var loadedAd: RewardedAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        connectivityObserver = ConnectivityObserverImpl(applicationContext)
         MobileAds.initialize(this@MainActivity) {}
-
         loadAd()
-
         setContent {
+            val connectivityStatus by connectivityObserver.observe()
+                .collectAsState(initial = ConnectivityObserver.ConnectivityStatus.IDLE)
             WatchToGiveTheme {
-               Navigation(
-                   onNavigationAction = { showAd() }
-               )
+                if (connectivityStatus == ConnectivityObserver.ConnectivityStatus.IDLE) {
+                    CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+                }
+                else if (connectivityStatus != ConnectivityObserver.ConnectivityStatus.AVAILABLE) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.no_connection),
+                            contentDescription = "No connection"
+                        )
+                        Text(
+                            text = "Oh No!",
+                            textAlign = TextAlign.Center,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(14.dp)
+                        )
+                        Text(
+                            text = "Can't connect to network, check your connection and try again.",
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp
+                        )
+                    }
+                } else {
+                    Navigation(
+                        onNavigationAction = { showAd() }
+                    )
+                }
             }
         }
     }
@@ -60,8 +105,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showAd() {
-        if (loadedAd == null){
-            Toast.makeText(this@MainActivity,"No Ads Available! Please try again later", Toast.LENGTH_LONG).show()
+        if (loadedAd == null) {
+            Toast.makeText(
+                this@MainActivity,
+                "No Ads Available! Please try again later",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         loadedAd?.show(this@MainActivity, OnUserEarnedRewardListener {
@@ -71,7 +120,7 @@ class MainActivity : ComponentActivity() {
                 .update("watched", FieldValue.increment(1))
 
             loadAd()
-            Toast.makeText(this@MainActivity,"Thank You!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, "Thank You!", Toast.LENGTH_LONG).show()
         })
     }
 }

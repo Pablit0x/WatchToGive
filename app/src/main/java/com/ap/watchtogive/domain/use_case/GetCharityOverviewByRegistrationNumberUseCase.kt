@@ -11,12 +11,12 @@ import java.io.IOException
 import javax.inject.Inject
 
 class GetCharityOverviewByRegistrationNumberUseCase @Inject constructor(
-    private val repository: CharityRepository
+    private val charityRepository: CharityRepository
 ) {
     operator fun invoke(regNumber : Int): Flow<Resource<CharityDetail>> = flow{
         try{
             emit(Resource.Loading())
-            val coinDetails = repository.getCharityOverviewByRegisteredNumber(regNumber).toCharityDetail()
+            val coinDetails = charityRepository.getCharityOverviewByRegisteredNumber(regNumber).toCharityDetail()
             emit(Resource.Success(coinDetails))
         } catch (e: HttpException){
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
